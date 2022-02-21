@@ -16,6 +16,7 @@ import (
 )
 
 type testClient struct {
+	conn   net.Conn
 	client *jrpc2.Client
 
 	rootPath string
@@ -40,6 +41,7 @@ func NewClient(addr string, dir string) (*testClient, error) {
 
 	c := &testClient{
 		client:   cli,
+		conn:     conn,
 		rootUri:  uri.FromPath(dir),
 		rootPath: dir, // TODO!: check if directory exists
 	}
@@ -120,4 +122,5 @@ func (c *testClient) Close() {
 	c.client.Call(context.Background(), "exit", nil)
 
 	c.client.Close()
+	c.conn.Close()
 }
