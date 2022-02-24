@@ -8,6 +8,10 @@ A programmatic language server protocol test client.
 - Performance profiling of single features
 - Write an E2E test suite for a language server by sending commands and comparing the responses
 
+## Future ideas
+
+- REPL
+
 ## Example
 
 ### Test auto-completion
