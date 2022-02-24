@@ -58,7 +58,7 @@ func NewClient(addr string, dir string) (*testClient, error) {
 func (c *testClient) Initialize() {
 	params := p.InitializeParams{
 		ProcessID:    12345,
-		Capabilities: p.ClientCapabilities{},
+		Capabilities: getCapabilities(),
 		RootPath:     c.rootPath,
 		RootURI:      p.DocumentURI(c.rootUri),
 	}
@@ -115,6 +115,46 @@ func (c *testClient) GetCompletions(uri p.DocumentURI, pos p.Position) ([]p.Comp
 	}
 
 	return result.Items, nil
+}
+
+func (c *testClient) GetSemanticTokens(uri p.DocumentURI) ([]uint32, error) {
+	params := p.SemanticTokensParams{
+		TextDocument: p.TextDocumentIdentifier{
+			URI: uri,
+		},
+	}
+
+	rsp, err := c.client.Call(context.Background(), "textDocument/semanticTokens/full", params)
+	if err != nil {
+		return nil, err
+	}
+
+	var result p.SemanticTokens
+	if err := rsp.UnmarshalResult(&result); err != nil {
+		return nil, err
+	}
+
+	return result.Data, nil
+}
+
+func (c *testClient) GetCodeLens(uri p.DocumentURI) ([]p.CodeLens, error) {
+	params := p.CodeLensParams{
+		TextDocument: p.TextDocumentIdentifier{
+			URI: uri,
+		},
+	}
+
+	rsp, err := c.client.Call(context.Background(), "textDocument/codeLens", params)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []p.CodeLens
+	if err := rsp.UnmarshalResult(&result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (c *testClient) Close() {

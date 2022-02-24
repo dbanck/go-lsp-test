@@ -1,15 +1,15 @@
 resource "random_pet" "application" {
-  count = var.count
+  count = var.fooo
   keepers = {
     unique = "unique"
   }
 }
 
-variable "count" {
+variable "fooo" {
   type = number
   default = 3
 }
 
 output "pet_count" {
-  value = var.count
+  value = var.fooo
 }
