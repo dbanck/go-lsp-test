@@ -8,6 +8,9 @@ func getCapabilities() p.ClientCapabilities {
 			CodeLens: p.CodeLensWorkspaceClientCapabilities{
 				RefreshSupport: true,
 			},
+			SemanticTokens: p.SemanticTokensWorkspaceClientCapabilities{
+				RefreshSupport: true,
+			},
 		},
 		TextDocument: p.TextDocumentClientCapabilities{
 			SemanticTokens: p.SemanticTokensClientCapabilities{
