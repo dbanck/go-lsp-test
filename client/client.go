@@ -117,6 +117,20 @@ func (c *testClient) GetCompletions(uri p.DocumentURI, pos p.Position) ([]p.Comp
 	return result.Items, nil
 }
 
+func (c *testClient) ResolveCompletionItem(ci p.CompletionItem) (*p.CompletionItem, error) {
+	rsp, err := c.client.Call(context.Background(), "completionItem/resolve", ci)
+	if err != nil {
+		return nil, err
+	}
+
+	var result p.CompletionItem
+	if err := rsp.UnmarshalResult(&result); err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 func (c *testClient) GetSemanticTokens(uri p.DocumentURI) ([]uint32, error) {
 	params := p.SemanticTokensParams{
 		TextDocument: p.TextDocumentIdentifier{
