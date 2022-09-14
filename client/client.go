@@ -171,6 +171,30 @@ func (c *testClient) GetCodeLens(uri p.DocumentURI) ([]p.CodeLens, error) {
 	return result, nil
 }
 
+func (c *testClient) Format(uri p.DocumentURI) ([]p.TextEdit, error) {
+	params := p.DocumentFormattingParams{
+		TextDocument: p.TextDocumentIdentifier{
+			URI: uri,
+		},
+		Options: p.FormattingOptions{
+			TabSize:      2,
+			InsertSpaces: true,
+		},
+	}
+
+	rsp, err := c.client.Call(context.Background(), "textDocument/formatting", params)
+	if err != nil {
+		return nil, err
+	}
+
+	var result []p.TextEdit
+	if err := rsp.UnmarshalResult(&result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func (c *testClient) Close() {
 	c.client.Call(context.Background(), "shutdown", nil)
 	c.client.Call(context.Background(), "exit", nil)
